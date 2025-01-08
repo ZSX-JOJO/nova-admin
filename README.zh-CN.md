@@ -5,7 +5,8 @@
 
 <div align="center">
     <img src="https://img.shields.io/github/license/chansee97/nova-admin"/>
-    <img src="https://img.shields.io/github/stars/chansee97/nova-admin"/>
+    <img src="https://badgen.net/github/stars/chansee97/nova-admin?icon=github"/>
+    <img src="https://gitee.com/chansee97/nova-admin/badge/star.svg"/>
     <img src="https://img.shields.io/github/forks/chansee97/nova-admin"/>
 </div>
 
@@ -18,8 +19,8 @@
 
 [Nova-admin](https://github.com/chansee97/nova-admin)是一个基于Vue3、Vite5、Typescript、Naive UI, 简洁干净后台管理模板，用简单的方式实现完整功能，并尽可能的考虑代码规范，易读易理解无过度封装，方便二次开发。
 
-- [Nova-Admin 预览](https://nova-admin-site.netlify.app/)
-- [Nova-Admin 文档](https://nova-admin-docs.netlify.app/)
+- [Nova-Admin 预览](https://nova-admin.pages.dev/)
+- [Nova-Admin 文档](https://nova-admin-docs.pages.dev/)
 
 ## 特性
 
@@ -50,7 +51,7 @@
 ## 接口文档
 
 本项目使用ApiFox进行接口mock，查看在线文档以了解更多接口详情
-[在线apifox文档](https://apifox.com/apidoc/shared-2b1abeb5-6e78-425e-a4ff-d7277ae83bf0)
+[在线apifox文档](https://nova-admin.apifox.cn)
 
 ## 安装使用
 
@@ -70,6 +71,13 @@ pnpm build
 
 ```
 
+在生产环境也可以使用 docker-compose 部署 **nova-admin**
+```bash
+# Build product
+docker compose -f docker-compose.product.yml up --build -d
+```
+> 关于 nginx.conf 只供参考，你可以根据自己的需求进行调整。
+
 ## 相关项目
 
 - [Nova-admin-nest](https://github.com/chansee97/nove-admin-nest) (开发中)基于TS, NestJs, typeorm的Nova-Admin配套后台项目
@@ -78,11 +86,11 @@ pnpm build
 
 Nova-Admin 是完全开源免费的项目，目前仍然在优化迭代中，旨在帮助开发者更方便地进行中大型管理系统开发，有使用问题欢迎在交流群内提问。
 
-| Q群 | 微信群 | 个人微信 |
-| :--: |:--: |:--: |
-| <img src="https://cdn.jsdelivr.net/gh/chansee97/static/nova-admin/q-group.png" width=170> | <img src="https://cdn.jsdelivr.net/gh/chansee97/static/nova-admin/wx-group.png" width=170>|<img src="https://cdn.jsdelivr.net/gh/chansee97/static/wechat.png" width=170>|
+| Q群 | 微信群 |
+| :--: |:--: |
+| <img src="https://cdn.jsdelivr.net/gh/chansee97/static/nova-admin/q-group.png" width=170> |<img src="https://cdn.jsdelivr.net/gh/chansee97/static/wechat.png" width=170>|
 
-> 微信群二维码失效请加我为好友
+> 添加微信请注明来意
 
 ## 贡献
 

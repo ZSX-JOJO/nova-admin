@@ -11,20 +11,36 @@ interface iconPorps {
   /* 图标深度 */
   depth?: 1 | 2 | 3 | 4 | 5
 }
-const props = withDefaults(defineProps<iconPorps>(), {
-  size: 18,
+const { size = 18, icon } = defineProps<iconPorps>()
+
+const isLocal = computed(() => {
+  return icon && icon.startsWith('local:')
 })
+
+function getLocalIcon(icon: string) {
+  const svgName = icon.replace('local:', '')
+  const svg = import.meta.glob<string>('@/assets/svg-icons/*.svg', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  })
+
+  return svg[`/src/assets/svg-icons/${svgName}.svg`]
+}
 </script>
 
 <template>
   <n-icon
-    v-if="props.icon"
-    :size="props.size"
-    :depth="props.depth"
-    :color="props.color"
+    v-if="icon"
+    :size="size"
+    :depth="depth"
+    :color="color"
   >
-    <Icon :icon="props.icon" />
+    <template v-if="isLocal">
+      <i v-html="getLocalIcon(icon)" />
+    </template>
+    <template v-else>
+      <Icon :icon="icon" />
+    </template>
   </n-icon>
 </template>
-
-<style scoped></style>

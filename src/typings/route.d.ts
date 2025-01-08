@@ -10,7 +10,7 @@ declare namespace AppRoute {
     /* 是否需要登录权限。 */
     requiresAuth?: boolean
     /* 可以访问的角色 */
-    roles?: Auth.RoleType[]
+    roles?: Entity.RoleType[]
     /* 是否开启页面缓存 */
     keepAlive?: boolean
     /* 有些路由我们并不想在菜单中显示，比如某些编辑页面。 */
@@ -29,6 +29,8 @@ declare namespace AppRoute {
     menuType?: MenuType
   }
 
+  type MetaKeys = keyof RouteMeta
+
   interface baseRoute {
     /** 路由名称(路由唯一标识) */
     name: string
@@ -45,9 +47,7 @@ declare namespace AppRoute {
   }
 
   /** 单个路由的类型结构(动态路由模式：后端返回此类型结构的路由) */
-  type RowRoute = {
-    [K in keyof RouteMeta as `meta.${K}`]?: RouteMeta[K]
-  } & baseRoute
+  type RowRoute = RouteMeta & baseRoute
 
   /**
    * 挂载到项目上的真实路由结构

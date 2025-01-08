@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { renderIcon } from '@/utils/icon'
 import { useAuthStore } from '@/store'
-import IconGithub from '~icons/icon-park-outline/github'
-import IconUser from '~icons/icon-park-outline/user'
-import IconLogout from '~icons/icon-park-outline/logout'
+import { renderIcon } from '@/utils/icon'
 import IconBookOpen from '~icons/icon-park-outline/book-open'
+import IconGithub from '~icons/icon-park-outline/github'
+import IconLogout from '~icons/icon-park-outline/logout'
+import IconUser from '~icons/icon-park-outline/user'
 
 const { t } = useI18n()
 
-const { userInfo, resetAuthStore } = useAuthStore()
+const { userInfo, logout } = useAuthStore()
 const router = useRouter()
 
 const options = computed(() => {
@@ -56,7 +56,7 @@ function handleSelect(key: string | number) {
       positiveText: t('common.confirm'),
       negativeText: t('common.cancel'),
       onPositiveClick: () => {
-        resetAuthStore()
+        logout()
       },
     })
   }
@@ -70,7 +70,7 @@ function handleSelect(key: string | number) {
     window.open('https://gitee.com/chansee97/nova-admin')
 
   if (key === 'docs')
-    window.open('https://nova-admin-docs.netlify.app/')
+    window.open('https://nova-admin-docs.pages.dev/')
 }
 </script>
 

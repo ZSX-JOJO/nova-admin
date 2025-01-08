@@ -1,24 +1,22 @@
 <script setup lang="ts">
 import type { RouteLocationNormalized } from 'vue-router'
-import Reload from './Reload.vue'
-import DropTabs from './DropTabs.vue'
 import { useAppStore, useTabStore } from '@/store'
-import IconRedo from '~icons/icon-park-outline/redo'
 import IconClose from '~icons/icon-park-outline/close'
 import IconDelete from '~icons/icon-park-outline/delete-four'
+import IconFullwith from '~icons/icon-park-outline/fullwidth'
+import IconRedo from '~icons/icon-park-outline/redo'
 import IconLeft from '~icons/icon-park-outline/to-left'
 import IconRight from '~icons/icon-park-outline/to-right'
-import IconFullwith from '~icons/icon-park-outline/fullwidth'
+import ContentFullScreen from './ContentFullScreen.vue'
+import DropTabs from './DropTabs.vue'
+import Reload from './Reload.vue'
 
 const tabStore = useTabStore()
 const appStore = useAppStore()
 
 const router = useRouter()
 function handleTab(route: RouteLocationNormalized) {
-  router.push(route.path)
-}
-function handleClose(path: string) {
-  tabStore.closeTab(path)
+  router.push(route.fullPath)
 }
 const { t } = useI18n()
 const options = computed(() => {
@@ -70,16 +68,16 @@ function handleSelect(key: string) {
       appStore.reloadPage()
     },
     closeCurrent() {
-      tabStore.closeTab(currentRoute.value.path)
+      tabStore.closeTab(currentRoute.value.fullPath)
     },
     closeOther() {
-      tabStore.closeOtherTabs(currentRoute.value.path)
+      tabStore.closeOtherTabs(currentRoute.value.fullPath)
     },
     closeLeft() {
-      tabStore.closeLeftTabs(currentRoute.value.path)
+      tabStore.closeLeftTabs(currentRoute.value.fullPath)
     },
     closeRight() {
-      tabStore.closeRightTabs(currentRoute.value.path)
+      tabStore.closeRightTabs(currentRoute.value.fullPath)
     },
     closeAll() {
       tabStore.closeAllTabs()
@@ -107,15 +105,15 @@ function onClickoutside() {
     <n-tabs
       type="card"
       size="small"
-      :tabs-padding="15"
+      :tabs-padding="10"
       :value="tabStore.currentTabPath"
-      @close="handleClose"
+      @close="tabStore.closeTab"
     >
       <n-tab
         v-for="item in tabStore.pinTabs"
-        :key="item.path"
-        :name="item.path"
-        @click="router.push(item.path)"
+        :key="item.fullPath"
+        :name="item.fullPath"
+        @click="router.push(item.fullPath)"
       >
         <div class="flex-x-center gap-2">
           <nova-icon :icon="item.meta.icon" /> {{ $t(`route.${String(item.name)}`, item.meta.title) }}
@@ -123,9 +121,9 @@ function onClickoutside() {
       </n-tab>
       <n-tab
         v-for="item in tabStore.tabs"
-        :key="item.path"
+        :key="item.fullPath"
         closable
-        :name="item.path as string"
+        :name="item.fullPath"
         @click="handleTab(item)"
         @contextmenu="handleContextMenu($event, item)"
       >
@@ -135,6 +133,7 @@ function onClickoutside() {
       </n-tab>
       <template #suffix>
         <Reload />
+        <ContentFullScreen />
         <DropTabs />
       </template>
     </n-tabs>
@@ -150,5 +149,3 @@ function onClickoutside() {
     />
   </div>
 </template>
-
-<style scoped></style>./DropTabs.vue

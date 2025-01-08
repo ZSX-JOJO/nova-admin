@@ -1,11 +1,15 @@
 <script setup lang="ts">
-const props = defineProps({
-  count: {
-    type: Number,
-    default: 0,
-  },
-})
-const emit = defineEmits(['change'])
+interface Props {
+  count?: number
+}
+const {
+  count = 0,
+} = defineProps<Props>()
+
+const emit = defineEmits<{
+  change: [page: number, pageSize: number] // 具名元组语法
+}>()
+
 const page = ref(1)
 const pageSize = ref(10)
 const displayOrder: Array<'pages' | 'size-picker' | 'quick-jumper'> = ['size-picker', 'pages']
@@ -17,10 +21,11 @@ function changePage() {
 
 <template>
   <n-pagination
-    v-if="props.count > 0"
+    v-if="count > 0"
     v-model:page="page"
     v-model:page-size="pageSize"
-    :item-count="props.count"
+    :page-sizes="[10, 20, 30, 50]"
+    :item-count="count"
     :display-order="displayOrder"
     show-size-picker
     @update-page="changePage"

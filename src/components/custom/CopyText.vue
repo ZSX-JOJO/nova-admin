@@ -1,17 +1,23 @@
 <script setup lang="ts">
-const props = defineProps<{
+interface Props {
   maxLength?: string
-}>()
-const modelValue = defineModel<string>()
+}
+const { maxLength } = defineProps<Props>()
+const modelValue = defineModel<string>('value')
 </script>
 
 <template>
   <div v-if="modelValue" class="inline-flex items-center gap-0.5em">
-    <n-ellipsis :style="{ 'max-width': props.maxLength || '12em' }">
+    <n-ellipsis :style="{ 'max-width': maxLength || '12em' }">
       {{ modelValue }}
     </n-ellipsis>
-    <span v-copy="modelValue" class="cursor-pointer">
-      <icon-park-outline-copy />
-    </span>
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <span v-copy="modelValue" class="cursor-pointer">
+          <icon-park-outline-copy />
+        </span>
+      </template>
+      {{ $t('components.copyText.tooltip') }}
+    </n-tooltip>
   </div>
 </template>

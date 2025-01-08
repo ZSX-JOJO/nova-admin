@@ -50,7 +50,7 @@ const option = ref<ECOption>({
   },
   ],
 }) as Ref<ECOption>
-const { domRef: lineRef } = useEcharts(option)
+useEcharts('lineRef', option)
 </script>
 
 <template>

@@ -1,11 +1,11 @@
-import { useRouteStore } from './route'
-import { useTabStore } from './tab'
-import { fetchLogin } from '@/service'
 import { router } from '@/router'
+import { fetchLogin } from '@/service'
 import { local } from '@/utils'
+import { useRouteStore } from './router'
+import { useTabStore } from './tab'
 
 interface AuthStatus {
-  userInfo: ApiAuth.loginInfo | null
+  userInfo: Api.Login.Info | null
   token: string
 }
 export const useAuthStore = defineStore('auth-store', {
@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth-store', {
   },
   actions: {
     /* 登录退出，重置用户信息等 */
-    async resetAuthStore() {
+    async logout() {
       const route = unref(router.currentRoute)
       // 清除本地缓存
       this.clearAuthStorage()
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth-store', {
       // 清空标签栏数据
       const tabStore = useTabStore()
       tabStore.clearAllTabs()
-      // 重制当前存储库
+      // 重置当前存储库
       this.$reset()
       // 重定向到登录页
       if (route.meta.requiresAuth) {
@@ -53,16 +53,21 @@ export const useAuthStore = defineStore('auth-store', {
 
     /* 用户登录 */
     async login(userName: string, password: string) {
-      const { isSuccess, data } = await fetchLogin({ userName, password })
-      if (!isSuccess)
-        return
+      try {
+        const { isSuccess, data } = await fetchLogin({ userName, password })
+        if (!isSuccess)
+          return
 
-      // 处理登录信息
-      await this.handleAfterLogin(data)
+        // 处理登录信息
+        await this.handleLoginInfo(data)
+      }
+      catch (e) {
+        console.warn('[Login Error]:', e)
+      }
     },
 
-    /* 登录后的处理函数 */
-    async handleAfterLogin(data: ApiAuth.loginInfo) {
+    /* 处理登录返回的数据 */
+    async handleLoginInfo(data: Api.Login.Info) {
       // 将token和userInfo保存下来
       local.set('userInfo', data)
       local.set('accessToken', data.accessToken)

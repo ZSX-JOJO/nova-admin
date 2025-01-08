@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { graphic } from 'echarts'
 import { type ECOption, useEcharts } from '@/hooks'
+import { graphic } from 'echarts'
 
 const lineOptions = ref<ECOption>({
   tooltip: {
@@ -113,7 +113,8 @@ const lineOptions = ref<ECOption>({
     data: [20, 71, 8, 50, 57, 32],
   }],
 }) as Ref<ECOption>
-const { domRef: lineRef } = useEcharts(lineOptions)
+
+useEcharts('lineRef', lineOptions)
 </script>
 
 <template>
