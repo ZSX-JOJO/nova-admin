@@ -5,7 +5,8 @@
 
 <div align="center">
     <img src="https://img.shields.io/github/license/chansee97/nova-admin"/>
-    <img src="https://img.shields.io/github/stars/chansee97/nova-admin"/>
+    <img src="https://badgen.net/github/stars/chansee97/nova-admin?icon=github"/>
+    <img src="https://gitee.com/chansee97/nova-admin/badge/star.svg"/>
     <img src="https://img.shields.io/github/forks/chansee97/nova-admin"/>
 </div>
 
@@ -18,8 +19,8 @@
 
 [Nova-admin](https://github.com/chansee97/nova-admin) is a clean and concise back-end management template based on Vue3, Vite5, Typescript, and Naive UI. It implements complete functionality in a simple way, while also considering code standards, readability, and avoiding excessive encapsulation to facilitate secondary development.
 
-- [Nova-Admin preview](https://nova-admin-site.netlify.app/)
-- [Nova-Admin docs](https://nova-admin-docs.netlify.app/)
+- [Nova-Admin preview](https://nova-admin.pages.dev/)
+- [Nova-Admin docs](https://nova-admin-docs.pages.dev/)
 
 ## Features
 
@@ -50,7 +51,7 @@
 ## Interface document
 
 This project uses ApiFox for interface mock, check the online documentation for more interface details
-[online aipfox docs](https://apifox.com/apidoc/shared-2b1abeb5-6e78-425e-a4ff-d7277ae83bf0)
+[online aipfox docs](https://nova-admin.apifox.cn)
 
 ## Install and use
 
@@ -70,6 +71,13 @@ pnpm build
 
 ```
 
+You can deploy **nova-admin** in a production environment using docker-compose.
+```bash
+# Build product
+docker compose -f docker-compose.product.yml up --build -d
+```
+> The nginx.conf provided is for reference only. You can adjust it according to your own needs.
+
 ## Related projects
 
 - [Nova-admin-nest](https://github.com/chansee97/nove-admin-nest) (under development) Nova-Admin supporting background project based on TS, NestJs, typeorm
@@ -78,11 +86,11 @@ pnpm build
 
 Nova-Admin is a completely open-source and free project. It is still being optimized and iterated. It is designed to help developers more conveniently develop medium and large management systems. If you have any questions, please ask questions in the QQ exchange group.
 
-| Q-Group | wechat-Group |wechat |
-| :--: |:--: |:--: |
-| <img src="https://cdn.jsdelivr.net/gh/chansee97/static/nova-admin/q-group.png" width=170> | <img src="https://cdn.jsdelivr.net/gh/chansee97/static/nova-admin/wx-group.png" width=170>|<img src="https://cdn.jsdelivr.net/gh/chansee97/static/wechat.png" width=170>|
+| Q-Group | wechat-Group |
+| :--: |:--: |
+| <img src="https://cdn.jsdelivr.net/gh/chansee97/static/nova-admin/q-group.png" width=170> |<img src="https://cdn.jsdelivr.net/gh/chansee97/static/wechat.png" width=170>|
 
-> The WeChat group QR code is invalid, please add me as a friend.
+> Please indicate the purpose of adding WeChat.
 
 ## Contribution
 

@@ -1,5 +1,6 @@
 @import './reset.css';
 @import './transition.css';
+@import './naive.css';
 
 html,
 body,
@@ -12,4 +13,8 @@ body,
 
 .gray-mode {
   filter: grayscale(100%);
+}
+
+.drag-handle {
+  cursor: move;
 }

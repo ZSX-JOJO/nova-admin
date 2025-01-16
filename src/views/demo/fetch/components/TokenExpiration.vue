@@ -15,12 +15,10 @@ async function expiredToken() {
 
 <template>
   <n-card title="Token Expiration" size="small">
+    注意观察第二次的请求，token已刷新
     <n-button type="error" @click="expiredToken">
       click
     </n-button>
-    <n-alert title="关于401-token失效刷新" type="warning" class="mt-1">
-      请在控制台将网络速率设置为最低（1kb左右）后点击查看，否则会造成请求大量发送
-    </n-alert>
   </n-card>
 </template>
 

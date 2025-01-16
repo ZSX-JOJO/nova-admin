@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import type { RouteLocationNormalized } from 'vue-router'
-import Reload from './Reload.vue'
-import DropTabs from './DropTabs.vue'
 import { useAppStore, useTabStore } from '@/store'
-import IconRedo from '~icons/icon-park-outline/redo'
+import { useDraggable } from 'vue-draggable-plus'
 import IconClose from '~icons/icon-park-outline/close'
 import IconDelete from '~icons/icon-park-outline/delete-four'
+import IconFullwith from '~icons/icon-park-outline/fullwidth'
+import IconRedo from '~icons/icon-park-outline/redo'
 import IconLeft from '~icons/icon-park-outline/to-left'
 import IconRight from '~icons/icon-park-outline/to-right'
-import IconFullwith from '~icons/icon-park-outline/fullwidth'
+import ContentFullScreen from './ContentFullScreen.vue'
+import DropTabs from './DropTabs.vue'
+import Reload from './Reload.vue'
+import TabBarItem from './TabBarItem.vue'
 
 const tabStore = useTabStore()
 const appStore = useAppStore()
 
 const router = useRouter()
 function handleTab(route: RouteLocationNormalized) {
-  router.push(route.path)
-}
-function handleClose(path: string) {
-  tabStore.closeTab(path)
+  router.push(route.fullPath)
 }
 const { t } = useI18n()
 const options = computed(() => {
@@ -70,16 +70,16 @@ function handleSelect(key: string) {
       appStore.reloadPage()
     },
     closeCurrent() {
-      tabStore.closeTab(currentRoute.value.path)
+      tabStore.closeTab(currentRoute.value.fullPath)
     },
     closeOther() {
-      tabStore.closeOtherTabs(currentRoute.value.path)
+      tabStore.closeOtherTabs(currentRoute.value.fullPath)
     },
     closeLeft() {
-      tabStore.closeLeftTabs(currentRoute.value.path)
+      tabStore.closeLeftTabs(currentRoute.value.fullPath)
     },
     closeRight() {
-      tabStore.closeRightTabs(currentRoute.value.path)
+      tabStore.closeRightTabs(currentRoute.value.fullPath)
     },
     closeAll() {
       tabStore.closeAllTabs()
@@ -100,55 +100,49 @@ function handleContextMenu(e: MouseEvent, route: RouteLocationNormalized) {
 function onClickoutside() {
   showDropdown.value = false
 }
+
+// const [DefineTabItem, ReuseTabItem] = createReusableTemplate<{ route: RouteLocationNormalized }>()
+
+const el = ref()
+
+useDraggable(el, tabStore.tabs, {
+  animation: 150,
+  ghostClass: 'ghost',
+})
 </script>
 
 <template>
-  <div class="wh-full flex items-end">
-    <n-tabs
-      type="card"
-      size="small"
-      :tabs-padding="15"
-      :value="tabStore.currentTabPath"
-      @close="handleClose"
-    >
-      <n-tab
-        v-for="item in tabStore.pinTabs"
-        :key="item.path"
-        :name="item.path"
-        @click="router.push(item.path)"
-      >
-        <div class="flex-x-center gap-2">
-          <nova-icon :icon="item.meta.icon" /> {{ $t(`route.${String(item.name)}`, item.meta.title) }}
-        </div>
-      </n-tab>
-      <n-tab
-        v-for="item in tabStore.tabs"
-        :key="item.path"
-        closable
-        :name="item.path as string"
+  <div class="p-l-2 flex w-full relative">
+    <div class="flex items-end">
+      <TabBarItem
+        v-for="item in tabStore.pinTabs" :key="item.fullPath" :value="tabStore.currentTabPath" :route="item"
+        @click="handleTab(item)"
+      />
+    </div>
+    <div ref="el" class="flex items-end flex-1">
+      <TabBarItem
+        v-for="item in tabStore.tabs" :key="item.fullPath" :value="tabStore.currentTabPath" :route="item" closable
+        @close="tabStore.closeTab"
         @click="handleTab(item)"
         @contextmenu="handleContextMenu($event, item)"
-      >
-        <div class="flex-x-center gap-2">
-          <nova-icon :icon="item.meta.icon" /> {{ $t(`route.${String(item.name)}`, item.meta.title) }}
-        </div>
-      </n-tab>
-      <template #suffix>
-        <Reload />
-        <DropTabs />
-      </template>
-    </n-tabs>
-    <n-dropdown
-      placement="bottom-start"
-      trigger="manual"
-      :x="x"
-      :y="y"
-      :options="options"
-      :show="showDropdown"
-      :on-clickoutside="onClickoutside"
-      @select="handleSelect"
-    />
+      />
+      <n-dropdown
+        placement="bottom-start" trigger="manual" :x="x" :y="y" :options="options" :show="showDropdown"
+        :on-clickoutside="onClickoutside" @select="handleSelect"
+      />
+    </div>
+    <!-- <span class="m-l-auto" /> -->
+    <n-el class="absolute right-0 flex items-center gap-1 bg-[var(--base-color)] h-full">
+      <Reload />
+      <ContentFullScreen />
+      <DropTabs />
+    </n-el>
   </div>
 </template>
 
-<style scoped></style>./DropTabs.vue
+<style scoped>
+.ghost {
+  opacity: 0.5;
+  background: #c4f6d5;
+}
+</style>

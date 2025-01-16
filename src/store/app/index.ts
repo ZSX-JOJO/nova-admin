@@ -1,11 +1,13 @@
 import type { GlobalThemeOverrides } from 'naive-ui'
+import { local, setLocale } from '@/utils'
 import { colord } from 'colord'
 import { set } from 'radash'
 import themeConfig from './theme.json'
-import { local, setLocale } from '@/utils'
 
-type TransitionAnimation = '' | 'fade-slide' | 'fade-bottom' | 'fade-scale' | 'zoom-fade' | 'zoom-out'
-export type LayoutMode = 'leftMenu' | 'topMenu'
+export type TransitionAnimation = '' | 'fade-slide' | 'fade-bottom' | 'fade-scale' | 'zoom-fade' | 'zoom-out'
+export type LayoutMode = 'leftMenu' | 'topMenu' | 'mixMenu'
+
+const { VITE_DEFAULT_LANG, VITE_COPYRIGHT_INFO } = import.meta.env
 
 const docEle = ref(document.documentElement)
 
@@ -18,8 +20,8 @@ const { system, store } = useColorMode({
 export const useAppStore = defineStore('app-store', {
   state: () => {
     return {
-      footerText: 'Copyright © 2024 chansee97',
-      lang: 'enUS' as App.lang,
+      footerText: VITE_COPYRIGHT_INFO,
+      lang: VITE_DEFAULT_LANG,
       theme: themeConfig as GlobalThemeOverrides,
       primaryColor: themeConfig.common.primaryColor,
       collapsed: false,
@@ -33,8 +35,10 @@ export const useAppStore = defineStore('app-store', {
       showBreadcrumb: true,
       showBreadcrumbIcon: true,
       showWatermark: false,
+      showSetting: false,
       transitionAnimation: 'fade-slide' as TransitionAnimation,
       layoutMode: 'leftMenu' as LayoutMode,
+      contentFullScreen: false,
     }
   },
   getters: {
@@ -59,13 +63,13 @@ export const useAppStore = defineStore('app-store', {
       this.loadFlag = true
       this.showLogo = true
       this.showTabs = true
-      this.showLogo = true
       this.showFooter = true
       this.showBreadcrumb = true
       this.showBreadcrumbIcon = true
       this.showWatermark = false
       this.transitionAnimation = 'fade-slide'
       this.layoutMode = 'leftMenu'
+      this.contentFullScreen = false
 
       // 重置所有配色
       this.setPrimaryColor(this.primaryColor)
@@ -77,7 +81,7 @@ export const useAppStore = defineStore('app-store', {
     },
     /* 设置主题色 */
     setPrimaryColor(color: string) {
-      const brightenColor = colord(color).lighten(0.1).toHex()
+      const brightenColor = colord(color).lighten(0.05).toHex()
       const darkenColor = colord(color).darken(0.05).toHex()
       set(this.theme, 'common.primaryColor', color)
       set(this.theme, 'common.primaryColorHover', brightenColor)
@@ -124,11 +128,6 @@ export const useAppStore = defineStore('app-store', {
     },
   },
   persist: {
-    enabled: true,
-    strategies: [
-      {
-        storage: localStorage,
-      },
-    ],
+    storage: localStorage,
   },
 })

@@ -1,10 +1,10 @@
+import { fetchUpdateToken } from '@/service'
+import { useAuthStore } from '@/store'
+import { local } from '@/utils'
 import {
   ERROR_NO_TIP_STATUS,
   ERROR_STATUS,
 } from './config'
-import { useAuthStore } from '@/store'
-import { fetchUpdateToken } from '@/service'
-import { local } from '@/utils'
 
 type ErrorStatus = keyof typeof ERROR_STATUS
 
@@ -70,6 +70,13 @@ export function handleServiceResult(data: any, isSuccess: boolean = true) {
  */
 export async function handleRefreshToken() {
   const authStore = useAuthStore()
+  const isAutoRefresh = import.meta.env.VITE_AUTO_REFRESH_TOKEN === 'Y'
+  if (!isAutoRefresh) {
+    await authStore.logout()
+    return
+  }
+
+  // 刷新token
   const { data } = await fetchUpdateToken({ refreshToken: local.get('refreshToken') })
   if (data) {
     local.set('accessToken', data.accessToken)
@@ -77,7 +84,7 @@ export async function handleRefreshToken() {
   }
   else {
     // 刷新失败，退出
-    await authStore.resetAuthStore()
+    await authStore.logout()
   }
 }
 

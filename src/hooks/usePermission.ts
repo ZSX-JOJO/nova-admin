@@ -1,12 +1,12 @@
-import { isArray, isString } from 'radash'
 import { useAuthStore } from '@/store'
+import { isArray, isString } from 'radash'
 
 /** 权限判断 */
 export function usePermission() {
   const authStore = useAuthStore()
 
   function hasPermission(
-    permission: Auth.RoleType | Auth.RoleType[] | undefined,
+    permission: Entity.RoleType | Entity.RoleType[] | undefined,
   ) {
     if (!permission)
       return true

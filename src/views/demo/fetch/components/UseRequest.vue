@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useRequest } from 'alova'
 import {
   fetchGet,
 } from '@/service'
+
+import { useRequest } from 'alova/client'
 
 const emit = defineEmits<{
   update: [data: any] // 具名元组语法

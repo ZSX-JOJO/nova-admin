@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { graphic } from 'echarts'
 import { type ECOption, useEcharts } from '@/hooks'
+import { graphic } from 'echarts'
 
 // 饼状图
 const pieOptions = ref<ECOption>({
@@ -53,8 +53,28 @@ const pieOptions = ref<ECOption>({
       ],
     },
   ],
-}) as Ref<ECOption>
-const { domRef: pieRef } = useEcharts(pieOptions)
+})
+const { update } = useEcharts('pieRef', pieOptions)
+
+const randomValue = () => Math.round(Math.random() * 100)
+function updatePieChart() {
+  pieOptions.value.series = [
+    {
+      data: [
+        { value: randomValue(), name: 'rose1' },
+        { value: randomValue(), name: 'rose2' },
+        { value: randomValue(), name: 'rose3' },
+        { value: randomValue(), name: 'rose4' },
+        { value: randomValue(), name: 'rose5' },
+        { value: randomValue(), name: 'rose6' },
+        { value: randomValue(), name: 'rose7' },
+        { value: randomValue(), name: 'rose8' },
+      ],
+    },
+  ]
+
+  update(pieOptions.value)
+}
 
 // 折线图
 const lineOptions = ref<ECOption>({
@@ -244,8 +264,8 @@ const lineOptions = ref<ECOption>({
       data: [820, 932, 901, 934, 1290, 1330, 1320],
     },
   ],
-}) as Ref<ECOption>
-const { domRef: lineRef } = useEcharts(lineOptions)
+})
+useEcharts('lineRef', lineOptions)
 
 // 柱状图
 const barOptions = ref<ECOption>({
@@ -384,8 +404,9 @@ const barOptions = ref<ECOption>({
       data: [200, 382, 102, 267, 186, 315, 316],
     },
   ],
-}) as Ref<ECOption>
-const { domRef: barRef } = useEcharts(barOptions)
+})
+useEcharts('barRef', barOptions)
+
 // 雷达图
 const radarOptions = ref<ECOption>({
   title: {
@@ -476,8 +497,8 @@ const radarOptions = ref<ECOption>({
       ],
     },
   ],
-}) as Ref<ECOption>
-const { domRef: radarRef } = useEcharts(radarOptions)
+})
+useEcharts('radarRef', radarOptions)
 </script>
 
 <template>
@@ -486,6 +507,9 @@ const { domRef: radarRef } = useEcharts(radarOptions)
     :size="16"
   >
     <n-card>
+      <n-button @click="updatePieChart">
+        手动更新图表
+      </n-button>
       <div
         ref="pieRef"
         class="h-400px"

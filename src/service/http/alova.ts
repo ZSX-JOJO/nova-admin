@@ -1,30 +1,36 @@
+import { local } from '@/utils'
 import { createAlova } from 'alova'
-import VueHook from 'alova/vue'
-import GlobalFetch from 'alova/GlobalFetch'
-import { createServerTokenAuthentication } from '@alova/scene-vue'
-import qs from 'qs'
+import { createServerTokenAuthentication } from 'alova/client'
+import adapterFetch from 'alova/fetch'
+import VueHook, { type VueHookType } from 'alova/vue'
+import {
+  DEFAULT_ALOVA_OPTIONS,
+  DEFAULT_BACKEND_OPTIONS,
+} from './config'
 import {
   handleBusinessError,
   handleRefreshToken,
   handleResponseError,
   handleServiceResult,
 } from './handle'
-import {
-  DEFAULT_ALOVA_OPTIONS,
-  DEFAULT_BACKEND_OPTIONS,
-} from './config'
-import { local } from '@/utils'
 
-const { onAuthRequired, onResponseRefreshToken } = createServerTokenAuthentication({
+const { onAuthRequired, onResponseRefreshToken } = createServerTokenAuthentication<VueHookType>({
   // 服务端判定token过期
   refreshTokenOnSuccess: {
     // 当服务端返回401时，表示token过期
-    isExpired: (response, _method) => {
-      return response.status === 401
+    isExpired: (response, method) => {
+      const isExpired = method.meta && method.meta.isExpired
+      return response.status === 401 && !isExpired
     },
 
     // 当token过期时触发，在此函数中触发刷新token
-    handler: async (_response, _method) => {
+    handler: async (_response, method) => {
+      // 此处采取限制，防止过期请求无限循环重发
+      if (!method.meta)
+        method.meta = { isExpired: true }
+      else
+        method.meta.isExpired = true
+
       await handleRefreshToken()
     },
   },
@@ -44,15 +50,15 @@ export function createAlovaInstance(
 
   return createAlova({
     statesHook: VueHook,
-    requestAdapter: GlobalFetch(),
-    localCache: null,
+    requestAdapter: adapterFetch(),
+    cacheFor: null,
     baseURL: _alovaConfig.baseURL,
     timeout: _alovaConfig.timeout,
 
     beforeRequest: onAuthRequired((method) => {
       if (method.meta?.isFormPost) {
         method.config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-        method.data = qs.stringify(method.data)
+        method.data = new URLSearchParams(method.data as URLSearchParams).toString()
       }
       alovaConfig.beforeRequest?.(method)
     }),

@@ -1,3 +1,12 @@
+/* 存放数据库实体表类型， 具体内容在 ./entities */
+declare namespace Entity {
+}
+
+/* 各类接口返回的数据类型， 具体内容在 ./api */
+declare namespace Api {
+
+}
+
 interface Window {
   $loadingBar: import('naive-ui').LoadingBarApi
   $dialog: import('naive-ui').DialogApi
@@ -21,12 +30,12 @@ declare namespace NaiveUI {
 
 declare namespace Storage {
   interface Session {
-    demoKey: string
+    dict: DictMap
   }
 
   interface Local {
     /* 存储用户信息 */
-    userInfo: ApiAuth.loginInfo
+    userInfo: Api.Login.Info
     /* 存储访问token */
     accessToken: string
     /* 存储刷新token */
@@ -40,4 +49,8 @@ declare namespace Storage {
 
 declare namespace App {
   type lang = 'zhCN' | 'enUS'
+}
+
+interface DictMap {
+  [key: string]: Entity.Dict[]
 }
